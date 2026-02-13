@@ -799,6 +799,11 @@ html, body {
         font-size: 0.85rem;
     }
 
+
+/* Modal for plan preview */
+.plan-preview { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', monospace; white-space: pre-wrap; }
+.plan-doc { }
+
     .button-container {
         flex-direction: column;
     }

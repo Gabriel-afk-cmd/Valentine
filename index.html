@@ -87,10 +87,10 @@
                 <p class="yes-subtitle">Sigma</p>
             </div>
 
-            <!-- Plan Card -->
-            <div class="plan-card">
+            <!-- Plan Card (clickable preview / download / commit) -->
+            <div class="plan-card" id="plan-card">
                 <h2>Euse Plan 13.02.2026</h2>
-                <div class="plan-items">
+                <div class="plan-items" id="plan-items">
                     <div class="plan-item">
                         <span class="time">18:45</span>
                         <span class="activity">Zug nach Winti</span>
@@ -108,7 +108,14 @@
                         <span class="activity">aller a maison</span>
                     </div>
                 </div>
-            </div>
+
+                    <div class="plan-doc" id="plan-doc" style="margin-top:12px;padding:12px;border-radius:10px;background:linear-gradient(135deg,#fff9fb,#fff);border:1px solid rgba(255,189,209,0.35);">
+                        <pre id="plan-doc-text" class="plan-preview" style="white-space:pre-wrap;margin:0;font-family:inherit;"></pre>
+                        <div style="text-align:center;margin-top:12px;">
+                            <button id="download-plan" class="btn btn-yes">Download plan-2026-02-13.txt</button>
+                        </div>
+                    </div>
+                </div>
 
             <!-- Photo Gallery -->
             <div class="gallery-section">
@@ -139,6 +146,25 @@
             </div>
         </div>
     </section>
+
+    <!-- Plan preview / download / commit modal -->
+    <div id="plan-modal" class="modal hidden" aria-hidden="true">
+        <div class="modal-backdrop" id="modal-backdrop"></div>
+        <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+            <div class="modal-header">
+                <h3 id="modal-title">Plan Vorschau</h3>
+                <button id="modal-close" class="btn">✕</button>
+            </div>
+            <div class="modal-body">
+                <pre id="plan-preview" class="plan-preview" style="white-space:pre-wrap;"></pre>
+            </div>
+            <div class="modal-footer">
+                <button id="download-txt" class="btn btn-yes">Download .txt</button>
+                <button id="download-ics" class="btn btn-yes">Download .ics</button>
+                <button id="commit-github" class="btn btn-no">Commit to GitHub</button>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>

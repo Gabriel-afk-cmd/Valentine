@@ -311,3 +311,75 @@ if (window.matchMedia('(hover: none)').matches) {
     // Touch device - make Nei button harder to tap
     btnNei.style.pointerEvents = 'auto';
 }
+
+// ============================================
+// INLINE PLAN DOCUMENT + DOWNLOAD
+// ============================================
+
+function getPlanItems() {
+    const items = [];
+    document.querySelectorAll('#plan-items .plan-item').forEach(el => {
+        const time = el.querySelector('.time')?.textContent.trim() || '';
+        const activity = el.querySelector('.activity')?.textContent.trim() || '';
+        if (time || activity) items.push({ time, activity });
+    });
+    return items;
+}
+
+function formatPlanText(items) {
+    let out = 'Euse Plan 13.02.2026\n\n';
+    items.forEach(it => {
+        out += `${it.time} — ${it.activity}\n`;
+    });
+    return out;
+}
+
+function buildICS(items) {
+    const date = '20260213';
+    let ics = 'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Valentine//EN\r\n';
+    items.forEach((it, idx) => {
+        const [hh, mm] = it.time.split(':');
+        const start = `${date}T${hh}${mm}00`;
+        let endHour = parseInt(hh, 10) + 1;
+        let endMin = parseInt(mm, 10) + 30;
+        if (endMin >= 60) { endHour += 1; endMin -= 60; }
+        const end = `${date}T${String(endHour).padStart(2,'0')}${String(endMin).padStart(2,'0')}00`;
+        ics += 'BEGIN:VEVENT\r\n';
+        ics += `UID:valentine-plan-${idx}@local\r\n`;
+        ics += `DTSTAMP:${date}T000000Z\r\n`;
+        ics += `DTSTART:${start}\r\n`;
+        ics += `DTEND:${end}\r\n`;
+        ics += `SUMMARY:${it.activity}\r\n`;
+        ics += 'END:VEVENT\r\n';
+    });
+    ics += 'END:VCALENDAR\r\n';
+    return ics;
+}
+
+function populateInlinePlan() {
+    const items = getPlanItems();
+    const text = formatPlanText(items);
+    const pre = document.getElementById('plan-doc-text');
+    if (pre) pre.textContent = text;
+
+    const txtBlob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const icsBlob = new Blob([buildICS(items)], { type: 'text/calendar;charset=utf-8' });
+
+    const btn = document.getElementById('download-plan');
+    if (btn) {
+        btn.addEventListener('click', () => {
+            const url = URL.createObjectURL(txtBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'plan-2026-02-13.txt';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+        });
+    }
+}
+
+// populate on load
+window.addEventListener('DOMContentLoaded', populateInlinePlan);
+
