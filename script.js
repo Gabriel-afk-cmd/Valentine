@@ -313,128 +313,23 @@ if (window.matchMedia('(hover: none)').matches) {
 }
 
 // ============================================
-// WORD DOCUMENT PLAN GENERATION + DOWNLOAD
+// PDF DOWNLOAD HANDLER
 // ============================================
 
-function getPlanItems() {
-    const items = [];
-    document.querySelectorAll('#plan-items .plan-item').forEach(el => {
-        const time = el.querySelector('.time')?.textContent.trim() || '';
-        const activity = el.querySelector('.activity')?.textContent.trim() || '';
-        if (time || activity) items.push({ time, activity });
-    });
-    return items;
-}
-
-function generateWordDocument(items) {
-    const { Document, Packer, Paragraph, Table, TableCell, TableRow, WidthType, BorderStyle, TextRun, AlignmentType } = window.docx;
-
-    const tableRows = [
-        new TableRow({
-            children: [
-                new TableCell({
-                    children: [new Paragraph({ text: 'Time', bold: true })],
-                    width: { size: 20, type: WidthType.PERCENTAGE },
-                    borders: { bottom: { color: '#FFB8D1', space: 1, style: BorderStyle.SINGLE } }
-                }),
-                new TableCell({
-                    children: [new Paragraph({ text: 'Activity', bold: true })],
-                    width: { size: 80, type: WidthType.PERCENTAGE },
-                    borders: { bottom: { color: '#FFB8D1', space: 1, style: BorderStyle.SINGLE } }
-                })
-            ]
-        })
-    ];
-
-    items.forEach(item => {
-        tableRows.push(
-            new TableRow({
-                children: [
-                    new TableCell({
-                        children: [new Paragraph({ text: item.time })],
-                        width: { size: 20, type: WidthType.PERCENTAGE }
-                    }),
-                    new TableCell({
-                        children: [new Paragraph({ text: item.activity })],
-                        width: { size: 80, type: WidthType.PERCENTAGE }
-                    })
-                ]
-            })
-        );
-    });
-
-    const doc = new Document({
-        sections: [{
-            children: [
-                new Paragraph({
-                    text: 'Euse Plan 13.02.2026',
-                    bold: true,
-                    fontSize: 28,
-                    color: '#FF3D4D',
-                    alignment: AlignmentType.CENTER,
-                    spacing: { after: 200 }
-                }),
-                new Table({
-                    width: { size: 100, type: WidthType.PERCENTAGE },
-                    rows: tableRows
-                })
-            ]
-        }]
-    });
-
-    return doc;
-}
-
-function showWordPreview(items) {
-    const previewDiv = document.getElementById('word-preview');
-    if (previewDiv) {
-        previewDiv.innerHTML = '';
-        const title = document.createElement('div');
-        title.style.cssText = 'font-weight:bold;font-size:1.2rem;color:#ff3d4d;text-align:center;margin-bottom:12px;';
-        title.textContent = 'Euse Plan 13.02.2026';
-        previewDiv.appendChild(title);
-
-        items.forEach(item => {
-            const row = document.createElement('div');
-            row.style.cssText = 'display:flex;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,189,209,0.2);';
-            const time = document.createElement('strong');
-            time.style.color = '#ff3d4d';
-            time.textContent = item.time;
-            const activity = document.createElement('span');
-            activity.textContent = item.activity;
-            row.appendChild(time);
-            row.appendChild(activity);
-            previewDiv.appendChild(row);
-        });
-    }
-}
-
-function populateWordPlan() {
-    const items = getPlanItems();
-    showWordPreview(items);
-
-    const btn = document.getElementById('download-docx');
+function setupPDFDownload() {
+    const btn = document.getElementById('download-pdf');
     if (btn) {
-        btn.addEventListener('click', async () => {
-            try {
-                const doc = generateWordDocument(items);
-                const blob = await window.docx.Packer.toBlob(doc);
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'Euse-Plan-2026-02-13.docx';
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
-                URL.revokeObjectURL(url);
-            } catch (error) {
-                console.error('Error generating Word document:', error);
-                alert('Error generating Word document. Please try again.');
-            }
+        btn.addEventListener('click', () => {
+            const a = document.createElement('a');
+            a.href = 'Valentistag_Plan.pdf';
+            a.download = 'Valentistag_Plan.pdf';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
         });
     }
 }
 
-// populate on load
-window.addEventListener('DOMContentLoaded', populateWordPlan);
+// Setup on load
+window.addEventListener('DOMContentLoaded', setupPDFDownload);
 
