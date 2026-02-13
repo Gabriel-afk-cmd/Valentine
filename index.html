@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zarazoo Valentine ✨</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.js"></script>
 </head>
 <body>
     <!-- Music Player -->
@@ -110,9 +111,9 @@
                 </div>
 
                     <div class="plan-doc" id="plan-doc" style="margin-top:12px;padding:12px;border-radius:10px;background:linear-gradient(135deg,#fff9fb,#fff);border:1px solid rgba(255,189,209,0.35);">
-                        <pre id="plan-doc-text" class="plan-preview" style="white-space:pre-wrap;margin:0;font-family:inherit;"></pre>
+                        <div id="word-preview" style="min-height:200px;padding:12px;background:white;border-radius:6px;border:1px solid rgba(255,189,209,0.2);overflow-y:auto;font-size:0.95rem;line-height:1.6;"></div>
                         <div style="text-align:center;margin-top:12px;">
-                            <button id="download-plan" class="btn btn-yes">Download plan-2026-02-13.txt</button>
+                            <button id="download-docx" class="btn btn-yes">Download Plan.docx</button>
                         </div>
                     </div>
                 </div>
@@ -146,25 +147,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Plan preview / download / commit modal -->
-    <div id="plan-modal" class="modal hidden" aria-hidden="true">
-        <div class="modal-backdrop" id="modal-backdrop"></div>
-        <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-            <div class="modal-header">
-                <h3 id="modal-title">Plan Vorschau</h3>
-                <button id="modal-close" class="btn">✕</button>
-            </div>
-            <div class="modal-body">
-                <pre id="plan-preview" class="plan-preview" style="white-space:pre-wrap;"></pre>
-            </div>
-            <div class="modal-footer">
-                <button id="download-txt" class="btn btn-yes">Download .txt</button>
-                <button id="download-ics" class="btn btn-yes">Download .ics</button>
-                <button id="commit-github" class="btn btn-no">Commit to GitHub</button>
-            </div>
-        </div>
-    </div>
 
     <script src="script.js"></script>
 </body>

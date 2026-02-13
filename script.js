@@ -313,7 +313,7 @@ if (window.matchMedia('(hover: none)').matches) {
 }
 
 // ============================================
-// INLINE PLAN DOCUMENT + DOWNLOAD
+// WORD DOCUMENT PLAN GENERATION + DOWNLOAD
 // ============================================
 
 function getPlanItems() {
@@ -326,60 +326,115 @@ function getPlanItems() {
     return items;
 }
 
-function formatPlanText(items) {
-    let out = 'Euse Plan 13.02.2026\n\n';
-    items.forEach(it => {
-        out += `${it.time} — ${it.activity}\n`;
+function generateWordDocument(items) {
+    const { Document, Packer, Paragraph, Table, TableCell, TableRow, WidthType, BorderStyle, TextRun, AlignmentType } = window.docx;
+
+    const tableRows = [
+        new TableRow({
+            children: [
+                new TableCell({
+                    children: [new Paragraph({ text: 'Time', bold: true })],
+                    width: { size: 20, type: WidthType.PERCENTAGE },
+                    borders: { bottom: { color: '#FFB8D1', space: 1, style: BorderStyle.SINGLE } }
+                }),
+                new TableCell({
+                    children: [new Paragraph({ text: 'Activity', bold: true })],
+                    width: { size: 80, type: WidthType.PERCENTAGE },
+                    borders: { bottom: { color: '#FFB8D1', space: 1, style: BorderStyle.SINGLE } }
+                })
+            ]
+        })
+    ];
+
+    items.forEach(item => {
+        tableRows.push(
+            new TableRow({
+                children: [
+                    new TableCell({
+                        children: [new Paragraph({ text: item.time })],
+                        width: { size: 20, type: WidthType.PERCENTAGE }
+                    }),
+                    new TableCell({
+                        children: [new Paragraph({ text: item.activity })],
+                        width: { size: 80, type: WidthType.PERCENTAGE }
+                    })
+                ]
+            })
+        );
     });
-    return out;
+
+    const doc = new Document({
+        sections: [{
+            children: [
+                new Paragraph({
+                    text: 'Euse Plan 13.02.2026',
+                    bold: true,
+                    fontSize: 28,
+                    color: '#FF3D4D',
+                    alignment: AlignmentType.CENTER,
+                    spacing: { after: 200 }
+                }),
+                new Table({
+                    width: { size: 100, type: WidthType.PERCENTAGE },
+                    rows: tableRows
+                })
+            ]
+        }]
+    });
+
+    return doc;
 }
 
-function buildICS(items) {
-    const date = '20260213';
-    let ics = 'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Valentine//EN\r\n';
-    items.forEach((it, idx) => {
-        const [hh, mm] = it.time.split(':');
-        const start = `${date}T${hh}${mm}00`;
-        let endHour = parseInt(hh, 10) + 1;
-        let endMin = parseInt(mm, 10) + 30;
-        if (endMin >= 60) { endHour += 1; endMin -= 60; }
-        const end = `${date}T${String(endHour).padStart(2,'0')}${String(endMin).padStart(2,'0')}00`;
-        ics += 'BEGIN:VEVENT\r\n';
-        ics += `UID:valentine-plan-${idx}@local\r\n`;
-        ics += `DTSTAMP:${date}T000000Z\r\n`;
-        ics += `DTSTART:${start}\r\n`;
-        ics += `DTEND:${end}\r\n`;
-        ics += `SUMMARY:${it.activity}\r\n`;
-        ics += 'END:VEVENT\r\n';
-    });
-    ics += 'END:VCALENDAR\r\n';
-    return ics;
+function showWordPreview(items) {
+    const previewDiv = document.getElementById('word-preview');
+    if (previewDiv) {
+        previewDiv.innerHTML = '';
+        const title = document.createElement('div');
+        title.style.cssText = 'font-weight:bold;font-size:1.2rem;color:#ff3d4d;text-align:center;margin-bottom:12px;';
+        title.textContent = 'Euse Plan 13.02.2026';
+        previewDiv.appendChild(title);
+
+        items.forEach(item => {
+            const row = document.createElement('div');
+            row.style.cssText = 'display:flex;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,189,209,0.2);';
+            const time = document.createElement('strong');
+            time.style.color = '#ff3d4d';
+            time.textContent = item.time;
+            const activity = document.createElement('span');
+            activity.textContent = item.activity;
+            row.appendChild(time);
+            row.appendChild(activity);
+            previewDiv.appendChild(row);
+        });
+    }
 }
 
-function populateInlinePlan() {
+function populateWordPlan() {
     const items = getPlanItems();
-    const text = formatPlanText(items);
-    const pre = document.getElementById('plan-doc-text');
-    if (pre) pre.textContent = text;
+    showWordPreview(items);
 
-    const txtBlob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-    const icsBlob = new Blob([buildICS(items)], { type: 'text/calendar;charset=utf-8' });
-
-    const btn = document.getElementById('download-plan');
+    const btn = document.getElementById('download-docx');
     if (btn) {
-        btn.addEventListener('click', () => {
-            const url = URL.createObjectURL(txtBlob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'plan-2026-02-13.txt';
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            URL.revokeObjectURL(url);
+        btn.addEventListener('click', async () => {
+            try {
+                const doc = generateWordDocument(items);
+                const blob = await window.docx.Packer.toBlob(doc);
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'Euse-Plan-2026-02-13.docx';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                URL.revokeObjectURL(url);
+            } catch (error) {
+                console.error('Error generating Word document:', error);
+                alert('Error generating Word document. Please try again.');
+            }
         });
     }
 }
 
 // populate on load
-window.addEventListener('DOMContentLoaded', populateInlinePlan);
+window.addEventListener('DOMContentLoaded', populateWordPlan);
 
