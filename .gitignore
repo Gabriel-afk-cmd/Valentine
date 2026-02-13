@@ -1,0 +1,16 @@
+# Ignore temporary claude workspace folders created here
+tmpclaude-*/
+tmpclaude-*
+
+# Ignore common OS and editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Ignore Windows nul placeholder if present
+nul
+
+# Ignore any other temporary or backup files
+*.tmp
+*.bak
+*~

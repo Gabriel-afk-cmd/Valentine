@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zarazoo Valentine ✨</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Music Player -->
+    <div class="music-player" id="music-player">
+        <audio id="audio-player" preload="auto"></audio>
+
+        <div class="music-player-controls">
+            <!-- Play/Pause Button -->
+            <button id="music-toggle" class="music-btn" title="Toggle music">
+                <span class="music-icon">🎵</span>
+            </button>
+
+            <!-- Expandable Controls -->
+            <div class="music-expanded-controls">
+                <!-- Song Selector -->
+                <div class="control-group">
+                    <label for="song-select">Song:</label>
+                    <select id="song-select" class="song-select">
+                        <option value="1">Jeff Buckley - Everybody Here Wants You</option>
+                        <option value="2">Cherry Waves</option>
+                    </select>
+                </div>
+
+                <!-- Volume Control -->
+                <div class="control-group">
+                    <label for="volume-control">Volume:</label>
+                    <input type="range" id="volume-control" class="volume-slider" min="0" max="100" value="70">
+                    <span class="volume-value">70%</span>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="control-group progress-group">
+                    <input type="range" id="progress-bar" class="progress-bar" min="0" max="100" value="0">
+                </div>
+
+                <!-- Position Controls -->
+                <div class="control-group position-group">
+                    <label>Position:</label>
+                    <div class="position-buttons">
+                        <button class="pos-btn" data-position="bottom-left" title="Bottom Left">↙</button>
+                        <button class="pos-btn" data-position="bottom-right" title="Bottom Right">↘</button>
+                        <button class="pos-btn" data-position="top-left" title="Top Left">↖</button>
+                        <button class="pos-btn" data-position="top-right" title="Top Right">↗</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expand/Collapse Toggle -->
+            <button id="expand-toggle" class="expand-btn" title="Expand controls">⚙️</button>
+        </div>
+    </div>
+
+    <!-- Screen 1: The Ask -->
+    <section id="screen-ask" class="screen active">
+        <div class="floating-hearts-bg"></div>
+
+        <div class="ask-card">
+            <div class="heart-icon">💗</div>
+            <h1 class="ask-title">May i be ur Valentine?</h1>
+            <p class="ask-subtitle">
+                11 • Bershka • Emo törkinnn • Burgaa Kingg
+            </p>
+
+            <div class="button-container">
+                <button id="btn-ja" class="btn btn-yes">oui</button>
+                <button id="btn-nei" class="btn btn-no">No</button>
+            </div>
+
+            <p id="nei-counter" class="nei-counter"></p>
+        </div>
+    </section>
+
+    <!-- Screen 2: The Yes -->
+    <section id="screen-yes" class="screen">
+        <div class="floating-hearts-bg"></div>
+
+        <div class="yes-container">
+            <div class="yes-header">
+                <h1>Besser so 🥰</h1>
+                <p class="yes-subtitle">Sigma</p>
+            </div>
+
+            <!-- Plan Card -->
+            <div class="plan-card">
+                <h2>Euse Plan 13.02.2026</h2>
+                <div class="plan-items">
+                    <div class="plan-item">
+                        <span class="time">18:45</span>
+                        <span class="activity">Zug nach Winti</span>
+                    </div>
+                    <div class="plan-item">
+                        <span class="time">19:30</span>
+                        <span class="activity">Avatar Bluecinema</span>
+                    </div>
+                    <div class="plan-item">
+                        <span class="time">21:00</span>
+                        <span class="activity">Billard</span>
+                    </div>
+                    <div class="plan-item">
+                        <span class="time">22:30</span>
+                        <span class="activity">aller a maison</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Photo Gallery -->
+            <div class="gallery-section">
+                <h2>Us fr 📸</h2>
+                <div class="gallery-scroll">
+                    <!-- Real photos - replace src="" with your image paths -->
+                    <img src="photo1.jpg" alt="Moment 1" class="photo">
+                    <img src="photo2.jpg" alt="Moment 2" class="photo">
+                    <img src="photo3.jpg" alt="Moment 3" class="photo">
+                    <img src="photo4.jpg" alt="Moment 4" class="photo">
+                    <img src="photo5.jpg" alt="Moment 5" class="photo">
+                    <img src="photo6.jpg" alt="Moment 6" class="photo">
+                    <img src="photo7.jpg" alt="Moment 7" class="photo">
+                    <img src="photo8.jpg" alt="Moment 8" class="photo">
+                    <img src="photo9.jpg" alt="Moment 9" class="photo">
+                    <img src="photo10.jpg" alt="Moment 10" class="photo">
+                </div>
+            </div>
+
+            <!-- Love Letter -->
+            <div class="letter-card">
+                <h2>No öpis chlises 💕</h2>
+                <p>
+                    Zarasu ich schrieb zwar eig nd gern Liebesbrief aber ich weiss du hesh es gern deswege han ich mich <br>
+                    angstreggt das zschriebe. Ich wüt dir sage das ich dich wirklich gern ha und au wenn mengmal es so tönd als wär ich gnervt<br>
+                    Isch eif das ich momentan viel loss han aber Ich wöt dir sege ich lieb dich wirklich MWAH EMO TÖRKIN🫰.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
